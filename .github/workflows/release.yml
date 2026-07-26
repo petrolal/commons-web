@@ -1,5 +1,10 @@
 name: Release & Publish
 
+permissions:
+  contents: write
+  packages: write
+  pull-requests: write
+
 on:
   push:
     branches:
@@ -38,6 +43,6 @@ jobs:
       - name: Publish to GitHub Packages
         if: ${{ steps.release.outputs.release_created == true }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
           GITHUB_ACTOR: ${{ github.actor }}
         run: ./gradlew publish

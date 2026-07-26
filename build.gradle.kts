@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.petrolal.commons.web"
-version = project.findProperty("version")?.toString()?.takeIf { it.isNotBlank() && it != "unspecified" } ?: "2.1.0"
+version = System.getenv("VERSION")
 
 java {
     withSourcesJar()

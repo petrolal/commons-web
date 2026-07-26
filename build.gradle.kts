@@ -54,18 +54,17 @@ tasks.named<Jar>("jar") {
 
 publishing {
     publications {
-        create<MavenPublication>("mavenJava") {
+        create<MavenPublication>("gpr") {
             from(components["java"])
         }
     }
-
     repositories {
         maven {
             name = "GitHubPackages"
             url = uri("https://maven.pkg.github.com/petrolal/spring-commons-web")
             credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: project.findProperty("gpr.user") as String?
-                password = System.getenv("GITHUB_TOKEN") ?: project.findProperty("gpr.key") as String?
+                username = System.getenv("GITHUB_ACTOR") ?: "petrolal"
+                password = System.getenv("GITHUB_TOKEN") ?: System.getenv("GH_PAT")
             }
         }
     }

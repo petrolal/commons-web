@@ -38,7 +38,6 @@ dependencies {
     implementation(libs.jackson.kotlin)
     implementation(libs.kotlin.reflect)
 
-    // Force update vulnerable transitive dependency (CVE-2025-48924)
     constraints {
         implementation("org.apache.commons:commons-lang3:3.18.0") {
             because("Fixes CVE-2025-48924 transitive vulnerability")

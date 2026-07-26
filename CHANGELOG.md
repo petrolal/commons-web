@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.3.0](https://github.com/petrolal/spring-commons-web/compare/v2.2.0...v2.3.0) (2026-07-26)
+
+
+### Features
+
+* Add devtools, test, junit, h2, and Google API client dependencies for library consumers
+* Add Docker Compose and Testcontainers support for library consumers
+
+
 ## [2.1.0](https://github.com/petrolal/spring-commons-web/compare/v2.0.2...v2.1.0) (2026-07-26)
 
 

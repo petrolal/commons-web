@@ -9,7 +9,9 @@ plugins {
 }
 
 group = "com.petrolal.commons.web"
-version = System.getenv("VERSION")
+version = project.findProperty("version")?.toString()?.takeIf { it.isNotBlank() && it != "unspecified" }
+    ?: System.getenv("VERSION")?.takeIf { it.isNotBlank() }
+    ?: "2.2.0"
 
 java {
     withSourcesJar()
@@ -35,10 +37,7 @@ dependencyManagement {
 }
 
 dependencies {
-    api(libs.spring.boot.starter)
     api(libs.spring.boot.starter.web)
-    api(libs.spring.boot.starter.validation)
-    api(libs.spring.boot.starter.actuator)
     api(libs.spring.boot.starter.data.jpa)
     api(libs.spring.boot.starter.hateoas)
     api(libs.flyway.core)

@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - master
-  workflow_dispatch: # Allows manually triggering the run from GitHub UI
+  workflow_dispatch:
 
 jobs:
   qodana:

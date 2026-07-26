@@ -7,7 +7,7 @@ plugins {
     `maven-publish`
 }
 
-group = "com.petrolal.spring.commons.web"
+group = "com.petrolal.commons.web"
 version = "1.0.0"
 
 java {

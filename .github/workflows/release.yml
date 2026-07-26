@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - main
+      - master
+  workflow_dispatch: # Allows manually triggering the run from GitHub UI
 
 jobs:
   qodana:
@@ -15,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Removed the invalid pull_request ref
+          fetch-depth: 0
 
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2026.1

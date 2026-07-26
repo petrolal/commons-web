@@ -35,6 +35,7 @@ dependencyManagement {
 dependencies {
     api(libs.spring.boot.starter.web)
     api(libs.springdoc.openapi.ui)
+    api(libs.spring.boot.starter.hateoas)
     implementation(libs.jackson.kotlin)
     implementation(libs.kotlin.reflect)
 

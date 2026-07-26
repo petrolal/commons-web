@@ -7,6 +7,7 @@ springdoc = "2.6.0"
 
 [libraries]
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
+spring-boot-starter-hateoas = { module = "org.springframework.boot:spring-boot-starter-hateoas" }
 spring-boot-starter-test = { module = "org.springframework.boot:spring-boot-starter-test" }
 springdoc-openapi-ui = { module = "org.springdoc:springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 jackson-kotlin = { module = "com.fasterxml.jackson.module:jackson-module-kotlin" }

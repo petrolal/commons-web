@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Import
 
 @AutoConfiguration
 @EnableConfigurationProperties(CommonsWebProperties::class)
-@Import(SwaggerAutoConfiguration::class)
+@Import(SwaggerAutoConfiguration::class, HateoasAutoConfiguration::class)
 class CommonsWebAutoConfiguration(
     private val properties: CommonsWebProperties
 ) {

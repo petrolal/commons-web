@@ -22,7 +22,7 @@ jobs:
       - name: Set up JDK 25
         uses: actions/setup-java@v4
         with:
-          distribution: 'amzn'
+          distribution: 'corretto'
           java-version: '25'
 
       - name: Validate Gradle wrapper

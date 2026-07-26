@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "com.petrolal.commons.web"
-version = "2.1.0"
+version = project.findProperty("version")?.toString()?.takeIf { it.isNotBlank() && it != "unspecified" } ?: "2.1.0"
 
 java {
     withSourcesJar()
@@ -35,14 +35,17 @@ dependencyManagement {
 }
 
 dependencies {
+    api(libs.spring.boot.starter)
     api(libs.spring.boot.starter.web)
+    api(libs.spring.boot.starter.validation)
+    api(libs.spring.boot.starter.actuator)
     api(libs.spring.boot.starter.data.jpa)
     api(libs.spring.boot.starter.hateoas)
     api(libs.flyway.core)
     api(libs.flyway.database.postgresql)
     api(libs.springdoc.openapi.ui)
-    implementation(libs.jackson.kotlin)
-    implementation(libs.kotlin.reflect)
+    api(libs.jackson.kotlin)
+    api(libs.kotlin.reflect)
     runtimeOnly(libs.postgresql)
 
     constraints {

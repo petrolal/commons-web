@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.2](https://github.com/petrolal/spring-commons-web/compare/v2.0.1...v2.0.2) (2026-07-26)
+
+
+### Bug Fixes
+
+* publishing ([57f63a9](https://github.com/petrolal/spring-commons-web/commit/57f63a97ac59578caf07376c38726e33827857bb))
+* publishing ([52a5d75](https://github.com/petrolal/spring-commons-web/commit/52a5d750f63e460cfa12c1a68d909a33022bf010))
+
 ## [2.0.1](https://github.com/petrolal/spring-commons-web/compare/v2.0.0...v2.0.1) (2026-07-26)
 
 

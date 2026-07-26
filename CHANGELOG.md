@@ -1,6 +1,14 @@
 # Changelog
 
-## [2.0.2](https://github.com/petrolal/spring-commons-web/compare/v2.0.1...v2.0.2) (2026-07-26)
+## [2.1.0](https://github.com/petrolal/spring-commons-web/compare/v2.0.2...v2.1.0) (2026-07-26)
+
+
+### Features
+
+* implement flyway with postgres, data-jpa and junit support
+* add BaseEntity, JpaAutoConfiguration, and FlywayAutoConfiguration
+* improve release and publish pipeline workflow for GitHub Package Registry
+
 
 
 ### Bug Fixes

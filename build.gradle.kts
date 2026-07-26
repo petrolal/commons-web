@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.kotlin.main)
     alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.kotlin.jpa)
     alias(libs.plugins.spring.boot) apply false
     alias(libs.plugins.spring.dependency.management)
     `java-library`
@@ -8,9 +9,10 @@ plugins {
 }
 
 group = "com.petrolal.commons.web"
-version = "1.0.0"
+version = "2.1.0"
 
 java {
+    withSourcesJar()
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(libs.versions.java.get()))
     }
@@ -34,10 +36,14 @@ dependencyManagement {
 
 dependencies {
     api(libs.spring.boot.starter.web)
-    api(libs.springdoc.openapi.ui)
+    api(libs.spring.boot.starter.data.jpa)
     api(libs.spring.boot.starter.hateoas)
+    api(libs.flyway.core)
+    api(libs.flyway.database.postgresql)
+    api(libs.springdoc.openapi.ui)
     implementation(libs.jackson.kotlin)
     implementation(libs.kotlin.reflect)
+    runtimeOnly(libs.postgresql)
 
     constraints {
         implementation("org.apache.commons:commons-lang3:3.18.0") {
@@ -46,6 +52,14 @@ dependencies {
     }
 
     testImplementation(libs.spring.boot.starter.test)
+    testImplementation(libs.h2)
+    testImplementation(libs.testcontainers.postgresql)
+    testImplementation(libs.testcontainers.junit)
+    testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
 
 tasks.named<Jar>("jar") {

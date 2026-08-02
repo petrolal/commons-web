@@ -3,7 +3,7 @@
   "packages": {
     ".": {
       "release-type": "simple",
-      "package-name": "spring-commons-web",
+      "package-name": "commons-web",
       "extra-files": [
         "build.gradle.kts"
       ]

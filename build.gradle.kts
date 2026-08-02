@@ -81,7 +81,7 @@ publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/petrolal/spring-commons-web")
+            url = uri("https://maven.pkg.github.com/petrolal/commons-web")
             credentials {
                 username = System.getenv("GITHUB_ACTOR") ?: "petrolal"
                 password = System.getenv("GITHUB_TOKEN") ?: System.getenv("GH_PAT")

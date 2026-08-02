@@ -1,1 +1,1 @@
-rootProject.name = "spring-commons-web"
+rootProject.name = "commons-web"

@@ -1,11 +1,11 @@
-# Spring Commons Web
+# Commons Web
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Kotlin](https://img.shields.io/badge/Kotlin-2.1.10-purple.svg)](https://kotlinlang.org)
 [![Java](https://img.shields.io/badge/Java-21-orange.svg)](https://oracle.com/java)
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.4+-green.svg)](https://spring.io/projects/spring-boot)
 
-`spring-commons-web` is a foundational Spring Boot auto-configuration library written in Kotlin for microservices and web applications. It provides pre-configured defaults and shared abstractions for correlation ID tracing, global exception handling, JPA auditing, Flyway migrations, OpenAPI documentation, and HATEOAS hypermedia support.
+`commons-web` is a foundational Spring Boot auto-configuration library written in Kotlin for microservices and web applications. It provides pre-configured defaults and shared abstractions for correlation ID tracing, global exception handling, JPA auditing, Flyway migrations, OpenAPI documentation, and HATEOAS hypermedia support.
 
 ---
 
@@ -30,7 +30,7 @@ Add the GitHub Packages repository and dependency to your `build.gradle.kts`:
 repositories {
     mavenCentral()
     maven {
-        url = uri("https://maven.pkg.github.com/petrolal/spring-commons-web")
+        url = uri("https://maven.pkg.github.com/petrolal/commons-web")
         credentials {
             username = System.getenv("GITHUB_ACTOR") ?: "petrolal"
             password = System.getenv("GITHUB_TOKEN")
@@ -39,7 +39,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.petrolal.commons.web:spring-commons-web:2.2.0")
+    implementation("com.petrolal.commons.web:commons-web:2.2.0")
 }
 ```
 
@@ -49,13 +49,13 @@ dependencies {
 <repositories>
     <repository>
         <id>github</id>
-        <url>https://maven.pkg.github.com/petrolal/spring-commons-web</url>
+        <url>https://maven.pkg.github.com/petrolal/commons-web</url>
     </repository>
 </repositories>
 
 <dependency>
     <groupId>com.petrolal.commons.web</groupId>
-    <artifactId>spring-commons-web</artifactId>
+    <artifactId>commons-web</artifactId>
     <version>2.2.0</version>
 </dependency>
 ```

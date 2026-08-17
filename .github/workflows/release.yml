@@ -8,6 +8,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Custom version to publish (e.g. 2.1.1)'
+        required: false
+        type: string
 
 jobs:
   qodana:
@@ -63,9 +68,29 @@ jobs:
           config-file: .github/release-please-config.json
           manifest-file: .github/.release-please-manifest.json
 
-      - name: Publish to GitHub Packages
-        if: ${{ steps.release.outputs.release_created == true || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/v') }}
+      - name: Publish to Maven Central Portal
+        if: ${{ steps.release.outputs.release_created == true || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch' }}
         env:
+          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME || secrets.OSSRH_USERNAME }}
+          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD || secrets.OSSRH_PASSWORD }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.SIGNING_KEY || secrets.GPG_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD || secrets.GPG_PASSWORD }}
           GITHUB_TOKEN: ${{ secrets.GH_PAT || secrets.GITHUB_TOKEN }}
           GITHUB_ACTOR: ${{ github.actor }}
-        run: ./gradlew publish
+        run: |
+          VERSION=""
+          if [ -n "${{ inputs.version }}" ]; then
+            VERSION="${{ inputs.version }}"
+          elif [ "${{ steps.release.outputs.release_created }}" = "true" ]; then
+            VERSION="${{ steps.release.outputs.version }}"
+          elif [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
+            VERSION="${GITHUB_REF_NAME#v}"
+          fi
+
+          if [ -n "$VERSION" ]; then
+            echo "Publishing package version: ${VERSION}"
+            ./gradlew publish -Pversion="${VERSION}"
+          else
+            echo "Publishing default project version"
+            ./gradlew publish
+          fi

@@ -4,12 +4,15 @@ plugins {
     alias(libs.plugins.kotlin.jpa)
     alias(libs.plugins.spring.boot) apply false
     alias(libs.plugins.spring.dependency.management)
+    alias(libs.plugins.vannitech.maven.publish)
     `java-library`
     `maven-publish`
 }
 
 group = "com.petrolal.commons.web"
-version = "2.1.0"
+version = project.findProperty("version")?.toString()?.takeIf { it.isNotBlank() && it != "unspecified" }
+    ?: System.getenv("VERSION")?.takeIf { it.isNotBlank() }
+    ?: "2.4.0"
 
 java {
     withSourcesJar()
@@ -41,8 +44,20 @@ dependencies {
     api(libs.flyway.core)
     api(libs.flyway.database.postgresql)
     api(libs.springdoc.openapi.ui)
-    implementation(libs.jackson.kotlin)
-    implementation(libs.kotlin.reflect)
+    api(libs.jackson.kotlin)
+    api(libs.kotlin.reflect)
+    api(libs.spring.boot.devtools)
+    api(libs.spring.boot.starter.test)
+    api(libs.junit.platform.launcher)
+    api(libs.h2)
+    api(libs.google.api.client)
+    api(libs.google.oauth.client.jetty)
+    api(libs.google.api.services.sheets)
+    api(libs.google.http.client.jackson2)
+    api(libs.spring.boot.docker.compose)
+    api(libs.spring.boot.testcontainers)
+    api(libs.testcontainers.postgresql)
+    api(libs.testcontainers.junit)
     runtimeOnly(libs.postgresql)
 
     constraints {
@@ -50,12 +65,6 @@ dependencies {
             because("Fixes CVE-2025-48924 transitive vulnerability")
         }
     }
-
-    testImplementation(libs.spring.boot.starter.test)
-    testImplementation(libs.h2)
-    testImplementation(libs.testcontainers.postgresql)
-    testImplementation(libs.testcontainers.junit)
-    testRuntimeOnly(libs.junit.platform.launcher)
 }
 
 tasks.withType<Test> {
@@ -66,20 +75,42 @@ tasks.named<Jar>("jar") {
     enabled = true
 }
 
-publishing {
-    publications {
-        create<MavenPublication>("gpr") {
-            from(components["java"])
-        }
+val hasSigningKey = project.hasProperty("signingInMemoryKey") ||
+    project.hasProperty("signing.keyId") ||
+    project.hasProperty("signing.gnupg.keyName") ||
+    System.getenv("ORG_GRADLE_PROJECT_signingInMemoryKey") != null ||
+    System.getenv("SIGNING_KEY") != null ||
+    System.getenv("GPG_SIGNING_KEY") != null
+
+mavenPublishing {
+    publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL)
+    if (hasSigningKey) {
+        signAllPublications()
     }
-    repositories {
-        maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/petrolal/spring-commons-web")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR") ?: "petrolal"
-                password = System.getenv("GITHUB_TOKEN") ?: System.getenv("GH_PAT")
+
+    coordinates(group.toString(), "commons-web", version.toString())
+
+    pom {
+        name.set("commons-web")
+        description.set("A commons Web Library for Kotlin with Spring")
+        url.set("https://github.com/petrolal/commons-web")
+        licenses {
+            license {
+                name.set("The Apache License, Version 2.0")
+                url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
             }
+        }
+        developers {
+            developer {
+                id.set("petrolal")
+                name.set("Lucas Petrola")
+                email.set("petrolalucas@gmail.com")
+            }
+        }
+        scm {
+            connection.set("scm:git:git://github.com/petrolal/commons-web.git")
+            developerConnection.set("scm:git:ssh://github.com:petrolal/commons-web.git")
+            url.set("https://github.com/petrolal/commons-web")
         }
     }
 }

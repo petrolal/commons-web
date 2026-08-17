@@ -3,8 +3,8 @@
   "packages": {
     ".": {
       "release-type": "simple",
+      "package-name": "commons-web",
       "extra-files": [
-        "gradle/libs.versions.toml",
         "build.gradle.kts"
       ]
     }

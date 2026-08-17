@@ -1,6 +1,6 @@
 [versions]
 java = "21"
-kotlin = "2.1.0"
+kotlin = "2.1.10"
 springBoot = "3.3.5"
 dependencyManagement = "1.1.6"
 springdoc = "2.6.0"
@@ -8,6 +8,7 @@ googleApiClient = "2.7.0"
 googleOauthClientJetty = "1.36.0"
 googleApiServicesSheets = "v4-rev20250211-2.0.0"
 googleHttpClientJackson2 = "1.45.0"
+mavenPublish = "0.29.0"
 
 [libraries]
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web" }
@@ -32,9 +33,11 @@ google-oauth-client-jetty = { group = "com.google.oauth-client", name = "google-
 google-api-services-sheets = { group = "com.google.apis", name = "google-api-services-sheets", version.ref = "googleApiServicesSheets" }
 google-http-client-jackson2 = { group = "com.google.http-client", name = "google-http-client-jackson2", version.ref = "googleHttpClientJackson2" }
 
+
 [plugins]
 kotlin-main = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
 kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
 spring-dependency-management = { id = "io.spring.dependency-management", version.ref = "dependencyManagement" }
+vannitech-maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }

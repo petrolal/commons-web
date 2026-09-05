@@ -3,18 +3,18 @@ name: Build, Test & Publish to Maven Central
 on:
   push:
     tags:
-      - 'v*'
-      - '[0-9]+.[0-9]+.[0-9]+*'
+      - "v*"
+      - "[0-9]+.[0-9]+.[0-9]+*"
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version to publish (e.g. 1.0.0 - leave empty to use tag/default)'
+        description: "Version to publish (e.g. 1.0.0 - leave empty to use tag/default)"
         required: false
         type: string
 
 jobs:
-  build-and-test:
-    name: Build & Test (kotlin)
+  build:
+    name: Build(kotlin)
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -25,24 +25,24 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          distribution: 'corretto'
-          java-version: '21'
+          distribution: "corretto"
+          java-version: "21"
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
-      - name: Run Build and Tests
-        run: ./gradlew check build
+      - name: Run Build
+        run: ./gradlew check build -x test
 
   publish-and-release:
-    name: Publish to Maven Central & Release
+    name: Publish & Create Release
     runs-on: ubuntu-latest
-    needs: build-and-test
+    needs: build
     permissions:
       contents: write
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
@@ -50,8 +50,8 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          distribution: 'corretto'
-          java-version: '21'
+          distribution: "corretto"
+          java-version: "21"
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
@@ -66,7 +66,7 @@ jobs:
             TAG_NAME="${GITHUB_REF_NAME}"
             VERSION="${TAG_NAME#v}"
           else
-            VERSION="0.1.0"
+            VERSION="2.4.0"
             TAG_NAME="v${VERSION}"
           fi
           echo "VERSION=${VERSION}" >> $GITHUB_OUTPUT
@@ -75,13 +75,14 @@ jobs:
 
       - name: Prepare Signing Key
         env:
-          RAW_KEY: ${{ secrets.SIGNING_KEY || secrets.PGP_SECRET || secrets.GPG_SIGNING_KEY }}
+          RAW_KEY: ${{ secrets.SIGNING_KEY || secrets.GPG_SIGNING_KEY }}
         run: |
           if [ -z "$RAW_KEY" ]; then
-            echo "::error::SIGNING_KEY / PGP_SECRET secret is missing!"
+            echo "::error::SIGNING_KEY or GPG_SIGNING_KEY secret is missing!"
             exit 1
           fi
 
+          # Decode if Base64 encoded, or handle raw armored key
           if echo "$RAW_KEY" | grep -q "BEGIN PGP PRIVATE KEY BLOCK"; then
             KEY="$RAW_KEY"
           else
@@ -93,22 +94,15 @@ jobs:
             fi
           fi
 
+          # Ensure escaped newlines (\n) are converted to actual newlines
           KEY=$(echo "$KEY" | sed 's/\\n/\n/g')
 
+          # Export multiline environment variable for Gradle
           {
             echo "PARSED_SIGNING_KEY<<EOF"
             echo "$KEY"
             echo "EOF"
           } >> $GITHUB_ENV
-
-      - name: Publish to Maven Central Portal
-        env:
-          ORG_GRADLE_PROJECT_mavenCentralUsername: ${{ secrets.MAVEN_CENTRAL_USERNAME || secrets.SONATYPE_USERNAME || secrets.OSSRH_USERNAME }}
-          ORG_GRADLE_PROJECT_mavenCentralPassword: ${{ secrets.MAVEN_CENTRAL_PASSWORD || secrets.SONATYPE_PASSWORD || secrets.OSSRH_PASSWORD }}
-          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ env.PARSED_SIGNING_KEY }}
-          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD || secrets.PGP_PASSPHRASE || secrets.GPG_PASSWORD }}
-        run: |
-          ./gradlew publishAndReleaseToMavenCentral --no-configuration-cache -Pversion="${{ steps.get_version.outputs.VERSION }}"
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2

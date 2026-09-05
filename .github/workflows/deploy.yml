@@ -40,6 +40,7 @@ jobs:
     needs: build
     permissions:
       contents: write
+      packages: write
 
     steps:
       - name: Checkout code
@@ -116,7 +117,10 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Publish package with Maven
-        run: mvn --batch-mode deploy
+      - name: Publish package to GitHub Packages
+        run: ./gradlew publishAllPublicationsToGitHubPackagesRepository -Pversion="${{ steps.get_version.outputs.VERSION }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ env.PARSED_SIGNING_KEY }}
+          ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.SIGNING_PASSWORD || secrets.PGP_PASSPHRASE || secrets.GPG_PASSWORD }}
